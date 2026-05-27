@@ -3,8 +3,15 @@
 session_start();
 
 if(!isset($_SESSION['user'])){
-header("Location:login.php");
+    header("Location:login.php");
+    exit;
 }
+
+require "db.php";
+
+$db = new db();
+
+$result = $db->get_data("emp");
 
 ?>
 
@@ -23,31 +30,37 @@ header("Location:login.php");
 
 <div class="container mt-4">
 
-<?php
+<div class="d-flex justify-content-between align-items-center mb-4">
 
-echo "<h4>Welcome ".$_SESSION['user']."</h4>";
+    <h3>
+        Welcome <?= $_SESSION['user'] ?>
+    </h3>
 
-require "db.php";
+    <a href="logout.php" class="btn btn-dark">
+        Logout
+    </a>
 
-$db = new db();
+</div>
 
-$result = $db->get_data("emp");
+<a href="create.php" class="btn btn-success mb-3">
+    Add Employee
+</a>
 
-?>
-
-<a href="create.php" class="btn btn-success mb-3">Add Employee</a>
-
-<table class="table table-bordered table-striped">
+<table class="table table-bordered table-striped table-hover">
 
 <thead class="table-dark">
+
 <tr>
+
 <th>ID</th>
 <th>First Name</th>
 <th>Last Name</th>
 <th>Email</th>
 <th>Address</th>
 <th>Actions</th>
+
 </tr>
+
 </thead>
 
 <tbody>
@@ -64,11 +77,13 @@ $result = $db->get_data("emp");
 
 <td>
 
-<a href="edit.php?id=<?= $row['id'] ?>" class="btn btn-primary btn-sm">Edit</a>
+<a href="edit.php?id=<?= $row['id'] ?>" class="btn btn-primary btn-sm">
+    Edit
+</a>
 
-<a href="delete.php?id=<?= $row['id'] ?>" class="btn btn-danger btn-sm">Delete</a>
-
-<a href="logout.php" class="btn btn-secondary btn-sm">Logout</a>
+<a href="delete.php?id=<?= $row['id'] ?>" class="btn btn-danger btn-sm">
+    Delete
+</a>
 
 </td>
 

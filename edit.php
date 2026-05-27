@@ -1,3 +1,28 @@
+<?php
+
+session_start();
+
+if(!isset($_SESSION['user'])){
+    header("Location:login.php");
+    exit;
+}
+
+require "db.php";
+
+$db = new db();
+
+$connection = $db->get_connection();
+
+$id = $_GET['id'];
+
+$stm = $connection->prepare("SELECT * FROM emp WHERE id=?");
+
+$stm->execute([$id]);
+
+$row = $stm->fetch(PDO::FETCH_ASSOC);
+
+?>
+
 <!DOCTYPE html>
 <html>
 
@@ -20,19 +45,39 @@
 <input type="hidden" name="id" value="<?= $row['id'] ?>">
 
 <div class="mb-3">
-<input type="text" name="fname" value="<?= $row['f_name'] ?>" class="form-control">
+    <input 
+        type="text" 
+        name="f_name" 
+        value="<?= $row['f_name'] ?>" 
+        class="form-control"
+    >
 </div>
 
 <div class="mb-3">
-<input type="text" name="lname" value="<?= $row['l_name'] ?>" class="form-control">
+    <input 
+        type="text" 
+        name="l_name" 
+        value="<?= $row['l_name'] ?>" 
+        class="form-control"
+    >
 </div>
 
 <div class="mb-3">
-<input type="email" name="email" value="<?= $row['email'] ?>" class="form-control">
+    <input 
+        type="email" 
+        name="email" 
+        value="<?= $row['email'] ?>" 
+        class="form-control"
+    >
 </div>
 
 <div class="mb-3">
-<input type="text" name="address" value="<?= $row['address'] ?>" class="form-control">
+    <input 
+        type="text" 
+        name="address" 
+        value="<?= $row['address'] ?>" 
+        class="form-control"
+    >
 </div>
 
 <button class="btn btn-primary">Update</button>
